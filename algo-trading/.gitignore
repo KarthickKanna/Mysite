@@ -1,0 +1,8 @@
+.env
+.kite_token.json
+__pycache__/
+*.pyc
+.pytest_cache/
+logs/
+data/*.csv
+!data/sample_*.csv

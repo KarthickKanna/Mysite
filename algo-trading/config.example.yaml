@@ -1,0 +1,35 @@
+# Copy to config.yaml and edit. Each strategy gets its own symbols / timeframe / params.
+exchange: NSE
+product: MIS            # MIS = intraday (auto square-off by Zerodha ~15:20). CNC = delivery.
+journal_path: logs/trades.jsonl
+fee_per_order: 20       # INR estimate subtracted per fill in paper/backtest P&L
+
+risk:                   # applies across ALL strategies
+  max_daily_loss: 3000        # realised+unrealised; breach => square off everything, halt for the day
+  max_order_value: 50000
+  max_order_qty: 500
+  max_open_positions: 5
+  max_strategy_capital: 100000
+  entry_start: "09:20"
+  entry_end: "15:00"
+  square_off: "15:15"
+
+strategies:
+  - name: ema_trend_reliance
+    type: ema_crossover
+    symbols: [RELIANCE, TCS]
+    timeframe: 5
+    params: {fast: 9, slow: 21, quantity: 5, stop_loss_pct: 0.01}
+
+  - name: rsi_bounce
+    type: rsi_reversion
+    symbols: [INFY, HDFCBANK]
+    timeframe: 15
+    params: {period: 14, oversold: 30, exit_level: 55, quantity: 5}
+
+  - name: orb
+    type: opening_range_breakout
+    symbols: [SBIN]
+    timeframe: 5
+    params: {range_minutes: 15, quantity: 10, target_r: 2.0}
+    enabled: true
